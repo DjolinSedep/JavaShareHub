@@ -101,6 +101,7 @@ public class FileServiceImpl implements FileService {
     public ResponseEntity<?> downloadFile(Long fileId){
         File file = getFileById(fileId);
         file.setDownloadCounter(file.getDownloadCounter() + 1);
+        fileRepository.save(file);
         String filename = file.getFilename();
         return fileUtil.getOutputFile(filename, "files", MediaType.APPLICATION_OCTET_STREAM);
     }
