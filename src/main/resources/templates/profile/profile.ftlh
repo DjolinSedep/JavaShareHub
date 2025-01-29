@@ -5,7 +5,7 @@
         <h4 class="text-center mb-4">My files</h4>
 
         <div class="text-center mb-4">
-            <a href="files/upload" class="btn btn-success">Загрузить новый файл</a>
+            <a href="/files/upload" class="btn btn-success">Загрузить новый файл</a>
         </div>
 
         <#if user.files?size gt 0>
