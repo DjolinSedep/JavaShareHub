@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FileRepository extends JpaRepository<File, Long> {
     Page<File> findAllByStatus(String status, Pageable pageable);
+    Page<File> findAllByStatusAndCategoryId(String status, Long category_id, Pageable pageable);
 }

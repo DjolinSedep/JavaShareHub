@@ -1,6 +1,7 @@
 package kg.attractor.javasharehub.controller;
 
 import jakarta.validation.Valid;
+import kg.attractor.javasharehub.dto.CategoryDto;
 import kg.attractor.javasharehub.dto.FileDto;
 import kg.attractor.javasharehub.dto.UploadFileDto;
 import kg.attractor.javasharehub.service.CategoryService;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping()
@@ -30,6 +32,17 @@ public class FileController {
     @GetMapping
     public String getAllFiles(Model model, @PageableDefault(size = 10) Pageable pageable) {
         Page<FileDto> files = fileService.getAllPublicFiles(pageable);
+        List<CategoryDto> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
+        model.addAttribute("files", files);
+        return "file/files";
+    }
+
+    @GetMapping("{categoryId}")
+    public String getAllFilesByCategory(@PathVariable Long categoryId, Model model, @PageableDefault(size = 10) Pageable pageable) {
+        Page<FileDto> files = fileService.getAllPublicFilesByCategoryId(categoryId, pageable);
+        List<CategoryDto> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         model.addAttribute("files", files);
         return "file/files";
     }

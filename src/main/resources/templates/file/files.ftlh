@@ -3,6 +3,18 @@
 <div class="container mt-4">
     <h2 class="text-center mb-4">Files list</h2>
 
+    <div class="dropdown text-start mt-2 mb-2">
+        <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Category
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/">All</a></li>
+            <#list categories as category>
+                <li><a class="dropdown-item" href="/${category.id}">${category.name}</a></li>
+            </#list>
+        </ul>
+    </div>
+
     <#if files.content?size gt 0>
         <div class="row">
             <#list files.content as file>

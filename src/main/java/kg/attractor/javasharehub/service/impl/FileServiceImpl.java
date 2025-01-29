@@ -51,6 +51,15 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public Page<FileDto> getAllPublicFilesByCategoryId(Long categoryId, Pageable pageable){
+        Page<File> files = fileRepository.findAllByStatusAndCategoryId("public", categoryId, pageable);
+        List<FileDto> fileDtoList= files.stream()
+                .map(this::convertToFileDto)
+                .toList();
+        return new PageImpl<>(fileDtoList, pageable, files.getTotalElements());
+    }
+
+    @Override
     public void upload(UploadFileDto fileDto, Principal principal) {
         String filename = fileUtil.saveFile(fileDto.getFile(), "files");
         User user = userService.getUserByEmail(principal.getName());

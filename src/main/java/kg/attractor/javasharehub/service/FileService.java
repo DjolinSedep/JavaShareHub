@@ -14,6 +14,8 @@ public interface FileService {
 
     Page<FileDto> getAllPublicFiles(Pageable pageable);
 
+    Page<FileDto> getAllPublicFilesByCategoryId(Long categoryId, Pageable pageable);
+
     void upload(UploadFileDto fileDto, Principal principal);
 
     ResponseEntity<?> downloadFile(Long fileId);
