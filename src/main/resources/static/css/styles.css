@@ -5,9 +5,12 @@
     justify-content: center;
 }
 
+
 .login-container {
     max-width: 360px;
     width: 100%;
+    margin-top: 100px;
+    margin-left: 580px;
     padding: 2rem;
     background: #ffffff;
     border-radius: 8px;

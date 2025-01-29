@@ -34,6 +34,8 @@ public class SecurityConfig {
                 .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll())
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/").permitAll()
+                        .requestMatchers("/profile").fullyAuthenticated()
+                        .requestMatchers("/files/**").fullyAuthenticated()
                         .anyRequest().permitAll()
                 );
         return http.build();

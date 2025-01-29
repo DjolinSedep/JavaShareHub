@@ -16,9 +16,16 @@ public interface FileService {
 
     Page<FileDto> getAllPublicFilesByCategoryId(Long categoryId, Pageable pageable);
 
+    String generatePrivateKey(Long fileId);
+
+    ResponseEntity<?> downloadByPrivateKey(String privateKey, Long fileId);
+
     void upload(UploadFileDto fileDto, Principal principal);
 
     ResponseEntity<?> downloadFile(Long fileId);
+
+
+    File getFileById(Long fileId);
 
     FileDto convertToFileDto(File file);
 }

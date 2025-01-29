@@ -4,12 +4,14 @@ import jakarta.validation.Valid;
 import kg.attractor.javasharehub.dto.CategoryDto;
 import kg.attractor.javasharehub.dto.FileDto;
 import kg.attractor.javasharehub.dto.UploadFileDto;
+import kg.attractor.javasharehub.entity.File;
 import kg.attractor.javasharehub.service.CategoryService;
 import kg.attractor.javasharehub.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,7 +51,20 @@ public class FileController {
 
     @GetMapping("download/{fileId}")
     public ResponseEntity<?> downloadFile(@PathVariable Long fileId) {
+        File file = fileService.getFileById(fileId);
+        if (!"public".equalsIgnoreCase(file.getStatus())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This file is not available for public download");
+        }
         return fileService.downloadFile(fileId);
+    }
+
+    @GetMapping("download/{privateKey}/{fileId}")
+    public ResponseEntity<?> downloadFileByPrivateKey(@PathVariable String privateKey, @PathVariable Long fileId) {
+        File file = fileService.getFileById(fileId);
+        if (file == null || !"private".equalsIgnoreCase(file.getStatus())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid or inaccessible private file");
+        }
+        return fileService.downloadByPrivateKey(privateKey, fileId);
     }
 
     @GetMapping("files/upload")
@@ -59,10 +74,17 @@ public class FileController {
     }
 
     @PostMapping("files/upload")
-    public String uploadFile(@Valid UploadFileDto uploadFileDto, Model model, Principal principal) {
+    public String uploadFile(@Valid UploadFileDto uploadFileDto, Principal principal) {
         fileService.upload(uploadFileDto, principal);
-        model.addAttribute("message", "Файл успешно загружен");
-        return "files/uploadSuccess";
+        return "profile/profile";
+    }
+
+    @PostMapping("files/{fileId}/generate-private-key")
+    public String generatePrivateKey(@PathVariable Long fileId, Model model) {
+        String privateKey = fileService.generatePrivateKey(fileId);
+        model.addAttribute("privateKey", privateKey);
+        model.addAttribute("fileId", fileId);
+        return "file/private-key";
     }
 
 }

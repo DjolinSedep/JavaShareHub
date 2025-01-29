@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -60,6 +61,27 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public String generatePrivateKey(Long fileId){
+        String privateKey = UUID.randomUUID().toString();
+        File file = getFileById(fileId);
+        file.setPrivateKey(privateKey);
+        fileRepository.save(file);
+        return privateKey;
+    }
+
+    @Override
+    public ResponseEntity<?> downloadByPrivateKey(String privateKey, Long fileId){
+        File file = getFileById(fileId);
+        if(file.getPrivateKey() != null && file.getPrivateKey().equals(privateKey)){
+            file.setPrivateKey(null);
+            fileRepository.save(file);
+            return downloadFile(file.getId());
+        } else {
+            throw new NoSuchElementException("Private Key Not Found");
+        }
+    }
+
+    @Override
     public void upload(UploadFileDto fileDto, Principal principal) {
         String filename = fileUtil.saveFile(fileDto.getFile(), "files");
         User user = userService.getUserByEmail(principal.getName());
@@ -77,9 +99,18 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public ResponseEntity<?> downloadFile(Long fileId){
-        File file = fileRepository.findById(fileId).orElseThrow(() -> new NoSuchElementException("File Not Found"));
+        File file = getFileById(fileId);
+        file.setDownloadCounter(file.getDownloadCounter() + 1);
         String filename = file.getFilename();
         return fileUtil.getOutputFile(filename, "files", MediaType.APPLICATION_OCTET_STREAM);
+    }
+
+
+
+
+    @Override
+    public File getFileById(Long fileId){
+        return fileRepository.findById(fileId).orElseThrow(() -> new NoSuchElementException("File Not Found"));
     }
 
     @Override
