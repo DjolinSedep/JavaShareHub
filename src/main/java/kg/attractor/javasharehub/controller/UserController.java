@@ -18,7 +18,7 @@ public class UserController {
 
     @GetMapping
     public String profile(Model model, Principal principal) {
-        UserDto user = userService.getUserByEmail(principal.getName());
+        UserDto user = userService.getUserDtoByEmail(principal.getName());
         model.addAttribute("user", user);
         return "profile/profile";
     }

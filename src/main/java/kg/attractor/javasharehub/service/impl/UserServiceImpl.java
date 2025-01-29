@@ -8,11 +8,9 @@ import kg.attractor.javasharehub.repository.UserRepository;
 import kg.attractor.javasharehub.service.FileService;
 import kg.attractor.javasharehub.service.RoleService;
 import kg.attractor.javasharehub.service.UserService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +18,20 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
     private final FileService fileService;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder, @Lazy FileService fileService) {
+        this.userRepository = userRepository;
+        this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
+        this.fileService = fileService;
+    }
 
     @Override
     public void registerUser(UserDto userDto) {
@@ -42,8 +47,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserByEmail(String email) {
+    public User getUserByEmail(String email) {
         log.info("Get user by email: {}", email);
+        return userRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException("User not found"));
+    }
+
+    @Override
+    public UserDto getUserDtoByEmail(String email) {
+        log.info("Get userDto by email: {}", email);
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException("User not found"));
         return convertToUserDto(user);
     }

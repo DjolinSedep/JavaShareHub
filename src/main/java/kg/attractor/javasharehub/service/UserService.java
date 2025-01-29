@@ -6,7 +6,9 @@ import kg.attractor.javasharehub.entity.User;
 public interface UserService {
     void registerUser(UserDto userDto);
 
-    UserDto getUserByEmail(String email);
+    User getUserByEmail(String email);
+
+    UserDto getUserDtoByEmail(String email);
 
     boolean checkUserExisting(String email);
 

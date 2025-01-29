@@ -2,8 +2,8 @@ package kg.attractor.javasharehub.service.impl;
 
 import kg.attractor.javasharehub.entity.User;
 import kg.attractor.javasharehub.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,10 +15,14 @@ import java.util.Collection;
 import java.util.List;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class AuthUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
+
+    @Autowired
+    public AuthUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
