@@ -13,7 +13,7 @@
                             <p class="card-text"><strong>Category:</strong> ${file.getCategory()}</p>
                             <p class="card-text"><strong>Downloads:</strong> ${file.getDownloadCounter()}</p>
                             <p class="card-text"><strong>Author:</strong> ${file.getAuthor()}</p>
-                            <a href="#" class="btn btn-primary w-50">Download</a>
+                            <a href="/download/${file.id}" class="btn btn-primary w-50">Download</a>
                         </div>
                     </div>
                 </div>
