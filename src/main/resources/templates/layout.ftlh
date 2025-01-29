@@ -13,7 +13,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <div class="container">
-        <a href="/" class="logo">
+        <a href="/" class="logo" style="text-decoration: none; color: black">
             Java Share Hub
         </a>
         <div class="ms-auto">

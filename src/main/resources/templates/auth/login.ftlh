@@ -17,6 +17,9 @@
             <input type="password" class="form-control" id="password" name="password" placeholder="Введите пароль" required>
         </div>
         <button type="submit" class="btn btn-primary w-100">Sign in</button>
+        <p class="text-center mt-3">
+            Don't have an account? <a href="/auth/register">Sign up</a>
+        </p>
     </form>
 </div>
 </@main.layout>
