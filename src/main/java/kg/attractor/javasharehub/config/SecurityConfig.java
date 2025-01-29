@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .formLogin(form ->
                         form.loginPage("/auth/login")
                                 .loginProcessingUrl("/auth/login")
-                                .defaultSuccessUrl("/")
+                                .defaultSuccessUrl("/profile")
                                 .failureUrl("/auth/login?error=true")
                                 .permitAll())
                 .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll())
