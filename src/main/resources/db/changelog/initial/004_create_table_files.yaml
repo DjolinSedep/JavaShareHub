@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004
+      author: Sedep
+      changes:
+        - createTable:
+            tableName: files
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: filename
+                  type: varchar(255)
+              - column:
+                  name: original_filename
+                  type: varchar(255)
+              - column:
+                  name: download_counter
+                  type: int
+              - column:
+                  name: status
+                  type: varchar(100)
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_id_to_files
+                    references: users(id)
+              - column:
+                  name: category_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_category_id_to_files
+                    references: categories(id)
+              - column:
+                  name: private_key
+                  type: varchar(255)
