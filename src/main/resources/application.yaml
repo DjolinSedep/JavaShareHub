@@ -1,0 +1,26 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: javasharehub
+
+  mvc:
+    static-path-pattern: /static/**
+  freemarker:
+    expose-session-attributes: true
+  datasource:
+    url: jdbc:h2:../db/java_share_hub;AUTO_SERVER=TRUE
+    username: root
+    password: qwerty
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    change-log: classpath:/db/changelog/master.yaml
+
+logging:
+  level:
+    root: info
+  file:
+    path: logs
