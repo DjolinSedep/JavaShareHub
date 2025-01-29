@@ -4,9 +4,11 @@ import jakarta.validation.Valid;
 import kg.attractor.javasharehub.dto.CategoryDto;
 import kg.attractor.javasharehub.dto.FileDto;
 import kg.attractor.javasharehub.dto.UploadFileDto;
+import kg.attractor.javasharehub.dto.UserDto;
 import kg.attractor.javasharehub.entity.File;
 import kg.attractor.javasharehub.service.CategoryService;
 import kg.attractor.javasharehub.service.FileService;
+import kg.attractor.javasharehub.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -29,6 +30,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FileController {
     private final FileService fileService;
+    private final UserService userService;
     private final CategoryService categoryService;
 
     @GetMapping
@@ -74,8 +76,10 @@ public class FileController {
     }
 
     @PostMapping("files/upload")
-    public String uploadFile(@Valid UploadFileDto uploadFileDto, Principal principal) {
+    public String uploadFile(@Valid UploadFileDto uploadFileDto, Principal principal, Model model) {
         fileService.upload(uploadFileDto, principal);
+        UserDto user = userService.getUserDtoByEmail(principal.getName());
+        model.addAttribute("user", user);
         return "profile/profile";
     }
 
